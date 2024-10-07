@@ -3,7 +3,7 @@ import { useState } from "react";
 function ChatList() {
   const [addMode, setAddMode] = useState(false);
   return (
-    <div className="flex-1 overflow-y-scroll">
+    <div className="flex-1 scrollbar-custom">
       <div>
         {/* search */}
         <div className="flex items-center gap-5 p-5">
@@ -21,6 +21,28 @@ function ChatList() {
             alt=""
             className="w-9 bg-bgColor p-[10px] rounded-lg cursor-pointer"
           />
+        </div>
+      </div>
+      <div className="flex items-center gap-5 p-5 cursor-pointer border-b-[1px] border-[#dddddd35]">
+        <img
+          src="./avatar.png"
+          alt=""
+          className="w-[50px] h-[50px] rounded-full"
+        />
+        <div className="flex flex-col gap-[10px]">
+          <span className="font-medium">Jane Doe</span>
+          <p className="font-light text-sm">Hello</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-5 p-5 cursor-pointer border-b-[1px] border-[#dddddd35]">
+        <img
+          src="./avatar.png"
+          alt=""
+          className="w-[50px] h-[50px] rounded-full"
+        />
+        <div className="flex flex-col gap-[10px]">
+          <span className="font-medium">Jane Doe</span>
+          <p className="font-light text-sm">Hello</p>
         </div>
       </div>
       <div className="flex items-center gap-5 p-5 cursor-pointer border-b-[1px] border-[#dddddd35]">

@@ -1,9 +1,14 @@
 import EmojiPicker from "emoji-picker-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function Chat() {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
+
+  const endRef = useRef(null);
+  useEffect(() => {
+    endRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, []);
 
   const handleEmoji = (e) => {
     setText((prev) => prev + e.emoji);
@@ -32,7 +37,7 @@ function Chat() {
           <img src="./info.png" alt="" className="w-5 h-5 cursor-pointer" />
         </div>
       </div>
-      <div className="flex-1 p-5 overflow-y-scroll flex flex-col gap-5">
+      <div className="flex-1 p-5 scrollbar-custom flex flex-col gap-5">
         {/* center */}
         <div className="max-w-[70%] flex gap-5">
           <img
@@ -84,6 +89,7 @@ function Chat() {
             <span className="text-xs">1 min ago</span>
           </div>
         </div>
+        <div ref={endRef}></div>
       </div>
       <div className="p-5  mt-auto flex items-center gap-5 justify-between border-t-[1px] border-[#dddddd35]">
         {/* bottom */}
