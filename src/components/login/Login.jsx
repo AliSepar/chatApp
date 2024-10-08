@@ -78,11 +78,11 @@ function Login() {
       setLoading(false);
     }
 
-    e.target.reset();
-    setAvatar({
-      file: null,
-      url: "",
-    });
+    // e.target.reset();
+    // setAvatar({
+    //   file: null,
+    //   url: "",
+    // });
   };
 
   return (

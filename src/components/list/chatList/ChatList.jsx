@@ -11,11 +11,9 @@ function ChatList() {
   const { currentUser } = useUserStore();
 
   useEffect(() => {
-    // will get data and store it in a useState chats
     const unSub = onSnapshot(
       doc(db, "userchats", currentUser.id),
       async (res) => {
-        // setChats(doc.data());
         const items = res.data().chats;
 
         const promises = items.map(async (item) => {
@@ -28,7 +26,7 @@ function ChatList() {
         });
 
         const chatData = await Promise.all(promises);
-        setChats(chatData.sort((a, b) => b.updateAt - a.updateAt));
+        setChats(chatData.sort((a, b) => b.updatedAt - a.updatedAt));
       }
     );
 
@@ -60,20 +58,22 @@ function ChatList() {
         </div>
       </div>
       {chats.map((chat) => {
-        <div
-          key={chat.id}
-          className="flex items-center gap-5 p-5 cursor-pointer border-b-[1px] border-[#dddddd35]"
-        >
-          <img
-            src="./avatar.png"
-            alt=""
-            className="w-[50px] h-[50px] rounded-full"
-          />
-          <div className="flex flex-col gap-[10px]">
-            <span className="font-medium">Jane Doe</span>
-            <p className="font-light text-sm">{chat.lastMessage}</p>
+        return (
+          <div
+            key={chat.chatId}
+            className="flex items-center gap-5 p-5 cursor-pointer border-b-[1px] border-[#dddddd35]"
+          >
+            <img
+              src={chat.user.avatar || "./avatar.png"}
+              alt=""
+              className="w-[50px] h-[50px] rounded-full"
+            />
+            <div className="flex flex-col gap-[10px]">
+              <span className="font-medium">{chat.user.username}</span>
+              <p className="font-light text-sm">{chat.lastMessage}</p>
+            </div>
           </div>
-        </div>;
+        );
       })}
       {addMode && <AddUser />}
     </div>
