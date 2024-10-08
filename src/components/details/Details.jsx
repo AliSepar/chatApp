@@ -1,3 +1,5 @@
+import { auth } from "../../lib/firebase";
+
 function Details() {
   return (
     <section className="hidden lg:flex flex-col max-w-[25%]">
@@ -98,7 +100,11 @@ function Details() {
         >
           Block User
         </button>
-        <button type="button" className="p-[10px] bg-[#1a73e8]">
+        <button
+          type="button"
+          className="p-[10px] bg-[#1a73e8]"
+          onClick={() => auth.signOut()}
+        >
           Logout
         </button>
       </div>
