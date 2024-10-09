@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import AddUser from "./addUser/AddUser";
 import { useUserStore } from "../../../lib/userStore";
-import { doc, getDoc, onSnapshot } from "firebase/firestore";
+import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
+import { useChatStore } from "../../../lib/chatStore";
 
 function ChatList() {
   const [addMode, setAddMode] = useState(false);
   const [chats, setChats] = useState([]);
 
   const { currentUser } = useUserStore();
+  const { chatId, changeChat } = useChatStore();
 
   useEffect(() => {
     const unSub = onSnapshot(
@@ -36,6 +38,32 @@ function ChatList() {
   }, [currentUser.id]);
   // [currentUser.id] if user chang it has to run agin
 
+  const handleSelect = async (chat) => {
+    const userChats = chats.map((item) => {
+      const { user, ...rest } = item;
+      return rest;
+    });
+
+    const chatIndex = userChats.findIndex(
+      (item) => item.chatId === chat.chatId
+    );
+
+    userChats[chatIndex].isSeen = true;
+
+    // updating userchats
+    const userChatsRef = doc(db, "userchats", currentUser.id);
+
+    try {
+      await updateDoc(userChatsRef, {
+        chats: userChats,
+      });
+
+      changeChat(chat.chatId, chat.user);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="flex-1 scrollbar-custom">
       <div>
@@ -60,7 +88,11 @@ function ChatList() {
       {chats.map((chat) => {
         return (
           <div
+            onClick={() => handleSelect(chat)}
             key={chat.chatId}
+            style={{
+              backgroundColor: chat?.isSeen ? "transparent" : "#5183fe",
+            }}
             className="flex items-center gap-5 p-5 cursor-pointer border-b-[1px] border-[#dddddd35]"
           >
             <img
