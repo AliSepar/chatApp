@@ -1,4 +1,4 @@
-import ChatList from "./chatList/chatList";
+import ChatList from "./chatList/ChatList";
 import UserInfo from "./UserInfo/userInfo";
 
 function List() {
