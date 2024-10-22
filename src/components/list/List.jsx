@@ -1,5 +1,5 @@
-import ChatList from "./chatList/ChatList";
-import UserInfo from "./UserInfo/userInfo";
+import ChatList from "./chatList/ChatList.jsx";
+import UserInfo from "./UserInfo/UserInfo.jsx";
 
 function List() {
   return (
