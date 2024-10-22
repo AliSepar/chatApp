@@ -48,6 +48,16 @@ body{
  
 }
 
+.sender{
+  align-self: flex-start !important;
+  div{
+    flex: 1;
+  }
+  p{
+    background-color: rgba(17,25,40,0.75) !important;
+  }
+}
+
 
 /* scroll bar */
 .scrollbar-custom {

@@ -1,16 +1,35 @@
-import { auth } from "../../lib/firebase";
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { useChatStore } from "../../lib/chatStore";
+import { auth, db } from "../../lib/firebase";
+import { useUserStore } from "../../lib/userStore";
 
 function Details() {
+  const { chatId, user, isCurrentUserBlocked, isReceiverBlocked, changeBlock } =
+    useChatStore();
+  const { currentUser } = useUserStore();
+
+  const handleBlock = async () => {
+    if (!user) return;
+    const userDocRef = doc(db, "users", currentUser.id);
+    try {
+      updateDoc(userDocRef, {
+        blocked: isReceiverBlocked ? arrayRemove(user.id) : arrayUnion(user.id),
+      });
+      changeBlock();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <section className="hidden lg:flex flex-col max-w-[25%]">
       {/* Details */}
       <div className="p-[25px] flex flex-col items-center gap-5  border-b-[1px] border-[#dddddd35]">
         <img
-          src="./avatar.png"
+          src={user?.avatar || "./avatar.png"}
           alt=""
           className="w-[100px] h-[100px] object-cover rounded-full"
         />
-        <h2 className="text-xl font-bold mt-[-5px]">Jane Doe</h2>
+        <h2 className="text-xl font-bold mt-[-5px]">{user?.username}</h2>
         <p>Lorem ipsum dolor, sit amet .</p>
       </div>
       <div className="p-5 flex flex-col gap-[25px] scrollbar-custom">
@@ -96,9 +115,14 @@ function Details() {
 
         <button
           type="button"
+          onClick={handleBlock}
           className="p-[15px] bg-[rgba(230,74,105,0.553)] text-white border-none rounded-md cursor-pointer hover:bg-[rgba(230,74,105,0.796)] transition-all duration-150"
         >
-          Block User
+          {isCurrentUserBlocked
+            ? "You are Blocked"
+            : isReceiverBlocked
+            ? "User Blocked"
+            : "Block User"}
         </button>
         <button
           type="button"

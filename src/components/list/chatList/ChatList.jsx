@@ -8,6 +8,7 @@ import { useChatStore } from "../../../lib/chatStore";
 function ChatList() {
   const [addMode, setAddMode] = useState(false);
   const [chats, setChats] = useState([]);
+  const [input, setInput] = useState("");
 
   const { currentUser } = useUserStore();
   const { chatId, changeChat } = useChatStore();
@@ -64,6 +65,11 @@ function ChatList() {
     }
   };
 
+  //filter chat based on the search
+  const filteredChat = chats.filter((c) =>
+    c.user.username.toLowerCase().includes(input.toLowerCase())
+  );
+
   return (
     <div className="flex-1 scrollbar-custom">
       <div>
@@ -75,6 +81,7 @@ function ChatList() {
               type="text"
               placeholder="search"
               className="w-[75%] border-none outline-none text-white"
+              onChange={(e) => setInput(e.target.value)}
             />
           </div>
           <img
@@ -85,7 +92,7 @@ function ChatList() {
           />
         </div>
       </div>
-      {chats.map((chat) => {
+      {filteredChat.map((chat) => {
         return (
           <div
             onClick={() => handleSelect(chat)}
@@ -96,12 +103,20 @@ function ChatList() {
             className="flex items-center gap-5 p-5 cursor-pointer border-b-[1px] border-[#dddddd35]"
           >
             <img
-              src={chat.user.avatar || "./avatar.png"}
+              src={
+                chat.user.blocked.includes(currentUser.id)
+                  ? "./avatar.png"
+                  : chat.user.avatar || "./avatar.png"
+              }
               alt=""
               className="w-[50px] h-[50px] rounded-full"
             />
             <div className="flex flex-col gap-[10px]">
-              <span className="font-medium">{chat.user.username}</span>
+              <span className="font-medium">
+                {chat.user.blocked.includes(currentUser.id)
+                  ? "User"
+                  : chat.user.username}
+              </span>
               <p className="font-light text-sm">{chat.lastMessage}</p>
             </div>
           </div>
